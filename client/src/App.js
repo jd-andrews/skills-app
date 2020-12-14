@@ -1,42 +1,64 @@
 import React, { Component } from "react";
 import "./App.css";
+import Emp from "./Emp";
 
 class App extends Component {
-  state = { passwords: [] };
+  state = { passwords: [], employees: [] };
 
   componentDidMount() {
-    this.getPasswords();
+    this.getEmployees();
   }
 
-  getPasswords = () => {
-    fetch("/api/passwords")
+  getEmployees = () => {
+    fetch("/api/employees")
       .then((res) => res.json())
-      .then((passwords) => this.setState({ passwords }));
+      .then((employees) => this.setState({ employees }));
+  };
+
+  updateSkill = (data) => {
+    fetch(`/api/employee/${data}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then(console.log("succes:", data));
   };
 
   render() {
-    const { passwords } = this.state;
+    const { employees } = this.state;
+    console.log(employees);
 
     return (
       <div className="App">
-        {passwords.length ? (
+        {employees.length ? (
           <div>
-            <h1>Five Passwords</h1>
+            <h1>Employees</h1>
             <ul className="passwords">
-              {passwords.map((password, index) => (
-                <li key={index}>{password}</li>
+              {employees.map((employee) => (
+                <li key={employee.id}>
+                  <Emp employee={employee} />
+                  <p>{employee.skills}</p>
+                </li>
               ))}
             </ul>
-            <button className="more" onClick={this.getPasswords}>
+            <button
+              className="more"
+              onClick={() => {
+                this.updateSkill([1, "typescript"]);
+              }}
+            >
               Get More
             </button>
           </div>
         ) : (
           <div>
-            <h1>No Passwords :((</h1>
-            <button className="more" onClick={this.getPasswords}>
+            <h1>No employees:((</h1>
+            {/* <button className="more" onClick={this.updateSkill(1)}>
               try Again?
-            </button>
+            </button> */}
           </div>
         )}
       </div>
