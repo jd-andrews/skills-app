@@ -40,20 +40,20 @@ app.get("/api/employees", (req, res) => {
   console.log(`Sent employees`);
 });
 
-app.put("/api/employee/:id", (req, res) => {
-  console.log(req.params.id);
-  for (let i = 0; i < employees.length; i++) {
-    if (parseInt(req.params.id) === employees[i].id) {
-      if (!employees[i].skills.includes(req.params.id))
-        employees[i].skills.push(req.params.id);
-      break;
-    } else {
-      console.log("ope");
-    }
-  }
-  console.log(employees);
-  res.json(employees);
-});
+// app.put("/api/employee/:id", (req, res) => {
+//   console.log(req.params.id);
+//   for (let i = 0; i < employees.length; i++) {
+//     if (parseInt(req.params.id) === employees[i].id) {
+//       if (!employees[i].skills.includes(req.params.id))
+//         employees[i].skills.push(req.params.id);
+//       break;
+//     } else {
+//       console.log("ope");
+//     }
+//   }
+//   console.log(employees);
+//   res.json(employees);
+// });
 
 // match one above, send back React's index.html file. // The "catchall" handler: for any request that doesn't
 app.get("*", (req, res) => {
