@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -6,6 +6,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,13 +25,15 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     right: "0",
   },
+  skillHold: {
+    display: "flex",
+    flexDirection: "row",
+  },
 }));
 
-export default function Emp({ employee }) {
+export default function Emp({ employee, parentCallBack }) {
   const classes = useStyles();
   const [newSkill, setSkill] = useState("");
-
-  useEffect(() => console.log("component updated"));
 
   const updateSkill = (data) => {
     console.log("start:", data);
@@ -43,6 +46,7 @@ export default function Emp({ employee }) {
     })
       .then((res) => res.json())
       .then(console.log("succes:", data));
+    parentCallBack();
   };
 
   const deleteEmployee = (id) => {
@@ -55,16 +59,25 @@ export default function Emp({ employee }) {
     })
       .then((res) => res.json())
       .then(console.log("succes:", id));
+    parentCallBack();
+  };
+
+  const deleteSkill = (data) => {
+    fetch(`/api/employees/skills/${data}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then(console.log("succes:", data));
+    parentCallBack();
   };
 
   const handleSubmit = () => {
     updateSkill([employee.id, newSkill]);
   };
-  //handleChange function to handle text area
-  // const handleSubmit = () => {
-  //   console.log("newSkill", newSkill);
-  // };
-  //onSubmit uses update skill to send the request using the state and employee.ID
 
   return (
     <Accordion>
@@ -74,11 +87,36 @@ export default function Emp({ employee }) {
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        {employee.skills.map((skill, i) => (
-          <Typography className={classes.skill} key={i}>
-            {skill}
-          </Typography>
-        ))}
+        {/* {employee.skills.map((skill, i) => (
+          <Container key={i}>
+            <Typography className={classes.skill}>{skill}</Typography>
+            <Button
+              onClick={(e) => deleteSkill([employee.id, i])}
+              color="secondary"
+            >
+              x
+            </Button>
+          </Container>
+        ))} */}
+        {employee.skills.length ? (
+          <Container>
+            {employee.skills.map((skill, i) => (
+              <Container key={i} className={classes.skillHold}>
+                <Typography className={classes.skill}>{skill}</Typography>
+                <Button
+                  onClick={(e) => deleteSkill([employee.id, i])}
+                  color="secondary"
+                >
+                  x
+                </Button>
+              </Container>
+            ))}
+          </Container>
+        ) : (
+          <Container>
+            <Typography className={classes.skill}>No Skills</Typography>
+          </Container>
+        )}
       </AccordionDetails>
       <AccordionDetails>
         <form noValidate autoComplete="off">

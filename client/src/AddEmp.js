@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddEmp({ employee }) {
+export default function AddEmp({ parentCallBack }) {
   const classes = useStyles();
   const [employeeName, setName] = useState("");
 
@@ -35,6 +35,7 @@ export default function AddEmp({ employee }) {
     })
       .then((res) => res.json())
       .then(console.log("succes:", data));
+    parentCallBack();
   };
 
   const handleSubmit = () => {

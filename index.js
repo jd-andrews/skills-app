@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, "client/build")));
 
 ///establishing pseudo-DB
 const employees = [
-  { firstName: "mike", id: 1, skills: ["networking"] },
+  { firstName: "mike", id: 1, skills: ["networking", "other", "again"] },
   { firstName: "same", id: 2, skills: [] },
   { firstName: "dan", id: 3, skills: [] },
   { firstName: "steve", id: 4, skills: [] },
@@ -70,8 +70,19 @@ app.put("/api/employee/:id", (req, res) => {
   res.json(employees);
 });
 
-///put call to remove skill
-
+///delete call to remove skill
+app.delete("/api/employees/skills/:data", (req, res) => {
+  let newData = req.params.data.split(",");
+  let id = newData[0];
+  let skill = newData[1];
+  for (let i = 0; i < employees.length; i++) {
+    if (parseInt(id) === employees[i].id) {
+      employees[i].skills.splice(skill, 1);
+      break;
+    } else {
+    }
+  }
+});
 // match one above, send back React's index.html file. // The "catchall" handler: for any request that doesn't
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
