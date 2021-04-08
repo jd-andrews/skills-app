@@ -9,7 +9,6 @@ Employee skill tracker/logger done to practice React, MaterialUI and an express 
 
 ## To do
 
-- style app
 - update onChange
 
 
